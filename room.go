@@ -11,12 +11,12 @@ import (
 
 // JoinRoom attempts to join a chat room with the given room details.
 func (s *Session) JoinRoom(room Room) error {
-	s.room = room
+	s.Room = room
 
-	resp, err := s.client.PostForm(BaseURL, url.Values{
-		"user-name": {s.name},
-		"room-name": {s.room.name},
-		"pass":      {s.room.password},
+	resp, err := s.Client.PostForm(BaseURL, url.Values{
+		"user-name": {s.Name},
+		"room-name": {s.Room.Name},
+		"pass":      {s.Room.Password},
 	})
 
 	if err != nil {
@@ -33,17 +33,17 @@ func (s *Session) JoinRoom(room Room) error {
 
 // RoomState retrieves the current state of the chat room.
 func (s *Session) RoomState() (RoomState, error) {
-	endpoint := GetEndpoint(s.room, "/ajax?lastId="+strconv.Itoa(s.room.index)+GetTypingParam(s.typing))
+	endpoint := GetEndpoint(s.Room, "/ajax?lastId="+strconv.Itoa(s.Room.Index)+GetTypingParam(s.Typing))
 
-	resp, err := s.client.Get(endpoint)
+	resp, err := s.Client.Get(endpoint)
 	if err != nil {
 		return RoomState{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		if s.handlers.onCrash != nil {
-			s.handlers.onCrash(Event{})
+		if s.Handlers.OnCrash != nil {
+			s.Handlers.OnCrash(Event{})
 		}
 
 		return RoomState{}, errors.New("cannot get room state: status " + resp.Status)
@@ -60,7 +60,7 @@ func (s *Session) RoomState() (RoomState, error) {
 		return RoomState{}, err
 	}
 
-	s.room.index = state.LastID
+	s.Room.Index = state.LastID
 
 	s.UpdateUsers(state.Users, true)
 
@@ -76,11 +76,11 @@ func (s *Session) UpdateIndex() error {
 
 	s.UpdateUsers(state.Users, false)
 
-	s.room.index = state.LastID
+	s.Room.Index = state.LastID
 	return nil
 }
 
 // IsJoined checks if the session is joined to a room.
 func (s *Session) IsJoined() bool {
-	return s.room.name != "" || s.room.index != 0
+	return s.Room.Name != "" || s.Room.Index != 0
 }

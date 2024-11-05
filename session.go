@@ -14,9 +14,9 @@ func New(name string) (*Session, error) {
 	jar, _ := cookiejar.New(nil)
 
 	return &Session{
-		name:   name,
-		room:   Room{},
-		client: http.Client{Jar: jar},
+		Name:   name,
+		Room:   Room{},
+		Client: http.Client{Jar: jar},
 	}, nil
 }
 
@@ -25,9 +25,9 @@ func (s *Session) UpdateName(name string) error {
 		return errors.New("bot is not joined to a room")
 	}
 
-	endpoint := GetEndpoint(s.room, "/change-user")
+	endpoint := GetEndpoint(s.Room, "/change-user")
 
-	resp, err := s.client.PostForm(endpoint, url.Values{
+	resp, err := s.Client.PostForm(endpoint, url.Values{
 		"new_name": {name},
 		"noRender": {"true"},
 	})
@@ -41,7 +41,7 @@ func (s *Session) UpdateName(name string) error {
 		return errors.New("unable to change name: status " + resp.Status)
 	}
 
-	s.name = name
+	s.Name = name
 
 	return nil
 }
@@ -51,7 +51,7 @@ func (s *Session) SetTyping(isTyping bool) error {
 		return errors.New("bot is not joined to a room")
 	}
 
-	s.typing = isTyping
+	s.Typing = isTyping
 
 	return nil
 }

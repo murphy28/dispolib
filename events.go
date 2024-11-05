@@ -4,17 +4,17 @@ package dispolib
 func (s *Session) AddHandler(eventType string, h func(Event)) {
 	switch eventType {
 	case "message":
-		s.handlers.onMessage = h
+		s.Handlers.OnMessage = h
 	case "join":
-		s.handlers.onJoin = h
+		s.Handlers.OnJoin = h
 	case "leave":
-		s.handlers.onLeave = h
+		s.Handlers.OnLeave = h
 	case "typing":
-		s.handlers.onTyping = h
+		s.Handlers.OnTyping = h
 	case "nameChange":
-		s.handlers.onNameChange = h
+		s.Handlers.OnNameChange = h
 	case "crash":
-		s.handlers.onCrash = h
+		s.Handlers.OnCrash = h
 	default:
 		panic("Invalid event type")
 	}

@@ -5,33 +5,33 @@ import (
 )
 
 type Room struct {
-	name     string
-	password string
-	index    int
-	users    []User
+	Name     string
+	Password string
+	Index    int
+	Users    []User
 }
 
 type Session struct {
-	name     string
-	room     Room
-	client   http.Client
-	handlers Handlers
-	typing   bool
+	Name     string
+	Room     Room
+	Client   http.Client
+	Handlers Handlers
+	Typing   bool
 }
 
 type Handlers struct {
-	onMessage    func(Event)
-	onJoin       func(Event)
-	onLeave      func(Event)
-	onTyping     func(Event)
-	onNameChange func(Event)
-	onCrash      func(Event)
+	OnMessage    func(Event)
+	OnJoin       func(Event)
+	OnLeave      func(Event)
+	OnTyping     func(Event)
+	OnNameChange func(Event)
+	OnCrash      func(Event)
 }
 
 type Event struct {
-	user    User
-	payload string
-	system  bool
+	User    User
+	Payload string
+	System  bool
 }
 
 type Message struct {

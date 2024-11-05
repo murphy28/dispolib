@@ -18,7 +18,7 @@ func (s *Session) GetMessages() error {
 
 	for _, msg := range state.Chats {
 		// Ignore messages from self
-		if msg.User == s.name {
+		if msg.User == s.Name {
 			continue
 		}
 
@@ -29,11 +29,11 @@ func (s *Session) GetMessages() error {
 			fmt.Print("Hi")
 		}
 
-		if s.handlers.onMessage != nil {
-			s.handlers.onMessage(Event{
-				user:    User{Name: msg.User},
-				payload: msg.Message,
-				system:  systemMessage,
+		if s.Handlers.OnMessage != nil {
+			s.Handlers.OnMessage(Event{
+				User:    User{Name: msg.User},
+				Payload: msg.Message,
+				System:  systemMessage,
 			})
 		}
 	}
@@ -47,9 +47,9 @@ func (s *Session) SendMessage(msg string) error {
 		return errors.New("bot is not joined to a room")
 	}
 
-	endpoint := GetEndpoint(s.room, "")
+	endpoint := GetEndpoint(s.Room, "")
 
-	resp, err := s.client.PostForm(endpoint, url.Values{
+	resp, err := s.Client.PostForm(endpoint, url.Values{
 		"message_input_window": {msg},
 		"noRender":             {"false"},
 	})
@@ -70,9 +70,9 @@ func (s *Session) ParseSystemMessage(msg string) bool {
 	split := strings.Split(msg, " has changed their user name to ")
 	fmt.Println("hi")
 	if len(split) > 1 {
-		s.handlers.onNameChange(Event{
-			user:    User{Name: split[1]},
-			payload: split[0],
+		s.Handlers.OnNameChange(Event{
+			User:    User{Name: split[1]},
+			Payload: split[0],
 		})
 	}
 
