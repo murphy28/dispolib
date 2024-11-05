@@ -51,13 +51,13 @@ func (s *Session) SetTyping(isTyping bool) error {
 		return errors.New("bot is not joined to a room")
 	}
 
-	s.Typing = isTyping
+	s.typing = isTyping
 
 	return nil
 }
 
 func (s *Session) Listen() {
-	fmt.Println("Dispolib listening...")
+	fmt.Println("Dispolib is listening...")
 	for {
 		s.GetMessages()
 		time.Sleep(1 * time.Second)

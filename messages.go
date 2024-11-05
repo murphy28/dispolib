@@ -2,7 +2,6 @@ package dispolib
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -26,12 +25,11 @@ func (s *Session) GetMessages() error {
 
 		if systemMessage {
 			s.ParseSystemMessage(msg.Message)
-			fmt.Print("Hi")
 		}
 
-		if s.Handlers.OnMessage != nil {
-			s.Handlers.OnMessage(Event{
-				User:    User{Name: msg.User},
+		if s.handlers.onMessage != nil {
+			s.handlers.onMessage(Event{
+				User:    user{Name: msg.User},
 				Payload: msg.Message,
 				System:  systemMessage,
 			})
@@ -66,15 +64,17 @@ func (s *Session) SendMessage(msg string) error {
 	return nil
 }
 
-func (s *Session) ParseSystemMessage(msg string) bool {
+func (s *Session) ParseSystemMessage(msg string) {
+	if s.handlers.onNameChange == nil {
+		return
+	}
+
 	split := strings.Split(msg, " has changed their user name to ")
-	fmt.Println("hi")
+
 	if len(split) > 1 {
-		s.Handlers.OnNameChange(Event{
-			User:    User{Name: split[1]},
+		s.handlers.onNameChange(Event{
+			User:    user{Name: split[1]},
 			Payload: split[0],
 		})
 	}
-
-	return true
 }

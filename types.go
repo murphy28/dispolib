@@ -7,47 +7,47 @@ import (
 type Room struct {
 	Name     string
 	Password string
-	Index    int
-	Users    []User
+	index    int
+	users    []user
 }
 
 type Session struct {
 	Name     string
 	Room     Room
 	Client   http.Client
-	Handlers Handlers
-	Typing   bool
+	handlers handlers
+	typing   bool
 }
 
-type Handlers struct {
-	OnMessage    func(Event)
-	OnJoin       func(Event)
-	OnLeave      func(Event)
-	OnTyping     func(Event)
-	OnNameChange func(Event)
-	OnCrash      func(Event)
+type handlers struct {
+	onMessage    func(Event)
+	onJoin       func(Event)
+	onLeave      func(Event)
+	onType       func(Event)
+	onNameChange func(Event)
+	onCrash      func(Event)
 }
 
 type Event struct {
-	User    User
+	User    user
 	Payload string
 	System  bool
 }
 
-type Message struct {
+type message struct {
 	ID      int    `json:"id"`
 	Message string `json:"message"`
 	User    string `json:"user"`
 }
 
-type User struct {
+type user struct {
 	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	Status string `json:"status"`
 }
 
-type RoomState struct {
-	Chats  []Message `json:"chats"`
+type roomState struct {
+	Chats  []message `json:"chats"`
 	LastID int       `json:"lastId"`
-	Users  []User    `json:"users"`
+	Users  []user    `json:"users"`
 }
